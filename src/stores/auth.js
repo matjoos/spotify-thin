@@ -13,7 +13,7 @@ const SCOPES = [
   'user-modify-playback-state',
 ].join(' ')
 
-const REDIRECT_URI = 'http://localhost:5173/callback'
+const REDIRECT_URI = 'http://127.0.0.1:5173/callback'
 
 function generateRandomString(length) {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
