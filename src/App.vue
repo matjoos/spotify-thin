@@ -73,11 +73,11 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
     </template>
 
     <template v-else>
-      <v-main>
-        <router-view />
+      <v-main class="d-flex align-center justify-center" style="min-height: 100vh">
+        <router-view v-if="$route.name === 'callback'" />
         <v-container
-          v-if="$route.name !== 'callback'"
-          class="fill-height d-flex align-center justify-center"
+          v-else
+          class="d-flex align-center justify-center"
         >
           <v-card max-width="440" class="pa-6 text-center" variant="outlined">
             <v-card-title class="text-h5 mb-2">Spotify Thin</v-card-title>
@@ -104,7 +104,7 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
               <a href="https://developer.spotify.com/dashboard" target="_blank" class="text-primary">
                 developer.spotify.com
               </a>
-              with redirect URI: <code>http://localhost:5173/callback</code>
+              with redirect URI: <code>http://127.0.0.1:5173/callback</code>
             </v-card-text>
           </v-card>
         </v-container>

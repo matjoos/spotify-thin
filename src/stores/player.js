@@ -29,7 +29,7 @@ export const usePlayerStore = defineStore('player', () => {
 
   async function initPlayer() {
     return new Promise((resolve) => {
-      window.onSpotifyWebPlaybackSDKReady = async () => {
+      const setup = async () => {
         const token = await auth.getValidToken()
         if (!token) return resolve(false)
 
@@ -86,9 +86,12 @@ export const usePlayerStore = defineStore('player', () => {
         player.value = p
       }
 
-      // If SDK already loaded, trigger manually
+      // If SDK already loaded (async script finished), set up immediately
       if (window.Spotify) {
-        window.onSpotifyWebPlaybackSDKReady()
+        setup()
+      } else {
+        // SDK not yet loaded — wait for the callback
+        window.onSpotifyWebPlaybackSDKReady = setup
       }
     })
   }
