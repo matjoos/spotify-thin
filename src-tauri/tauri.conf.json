@@ -1,0 +1,37 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nicehash/tauri/refs/heads/dev/crates/tauri-config-schema/schema.json",
+  "productName": "Spotify Thin",
+  "version": "0.1.0",
+  "identifier": "com.matjoos.spotify-thin",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:5173",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
+  },
+  "app": {
+    "title": "Spotify Thin",
+    "windows": [
+      {
+        "title": "Spotify Thin",
+        "width": 960,
+        "height": 640,
+        "minWidth": 680,
+        "minHeight": 480,
+        "decorations": true,
+        "resizable": true
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self' https://sdk.scdn.co; connect-src 'self' https://api.spotify.com https://accounts.spotify.com https://*.scdn.co https://*.spotify.com; img-src 'self' https://i.scdn.co https://*.spotifycdn.com data:; media-src 'self' https://*.scdn.co https://*.spotify.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com"
+    }
+  },
+  "plugins": {
+    "opener": {
+      "open": true
+    },
+    "shell": {
+      "open": true
+    }
+  }
+}
