@@ -10,7 +10,6 @@
     "beforeBuildCommand": "npm run build"
   },
   "app": {
-    "title": "Spotify Thin",
     "windows": [
       {
         "title": "Spotify Thin",
@@ -27,9 +26,7 @@
     }
   },
   "plugins": {
-    "opener": {
-      "open": true
-    },
+    "opener": {},
     "shell": {
       "open": true
     }
