@@ -1,0 +1,23 @@
+#!/bin/bash
+DIR="$(dirname "$(dirname "$(dirname "$0")")")"
+cd "$DIR/.."
+
+# Kill any existing server on port 5173
+lsof -ti:5173 | xargs kill 2>/dev/null
+sleep 0.5
+
+# Start the preview server in the background
+npx vite preview --host 127.0.0.1 --port 5173 &
+SERVER_PID=$!
+
+# Wait for server to be ready
+for i in {1..20}; do
+  curl -s http://127.0.0.1:5173 > /dev/null 2>&1 && break
+  sleep 0.3
+done
+
+# Open in Firefox
+open -a Firefox "http://127.0.0.1:5173"
+
+# Keep running until Firefox closes or we get killed
+wait $SERVER_PID

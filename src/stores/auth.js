@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
+const isTauri = !!window.__TAURI_INTERNALS__
+
 const SCOPES = [
   'streaming',
   'user-read-email',
@@ -73,7 +75,14 @@ export const useAuthStore = defineStore('auth', () => {
       code_challenge: challenge,
     })
 
-    window.location.href = `https://accounts.spotify.com/authorize?${params}`
+    const authUrl = `https://accounts.spotify.com/authorize?${params}`
+
+    if (isTauri) {
+      const { openUrl } = await import('@tauri-apps/plugin-opener')
+      await openUrl(authUrl)
+    } else {
+      window.location.href = authUrl
+    }
   }
 
   async function handleCallback(code) {
@@ -145,6 +154,9 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem('spotify_access_token')
     localStorage.removeItem('spotify_refresh_token')
     localStorage.removeItem('spotify_expires_at')
+    localStorage.removeItem('spotify_code_verifier')
+    // Force page reload to clear all state
+    window.location.reload()
   }
 
   return {

@@ -6,21 +6,24 @@ import { usePlayerStore } from '@/stores/player'
 import TrackList from '@/components/TrackList.vue'
 
 const route = useRoute()
-const { getPlaylist, getPlaylistTracks } = useSpotify()
+const { getPlaylist } = useSpotify()
 const player = usePlayerStore()
 
 const playlist = ref(null)
 const tracks = ref([])
 const loading = ref(false)
+const error = ref(null)
 
 async function load(id) {
   loading.value = true
+  error.value = null
   try {
-    const [pl, tr] = await Promise.all([getPlaylist(id), getPlaylistTracks(id)])
+    const pl = await getPlaylist(id)
     playlist.value = pl
-    tracks.value = tr.items
+    tracks.value = pl.tracks?.items || []
   } catch (e) {
     console.error('Failed to load playlist:', e)
+    error.value = e.message
   } finally {
     loading.value = false
   }
@@ -39,6 +42,7 @@ function playAll() {
 <template>
   <v-container>
     <v-progress-linear v-if="loading" indeterminate color="primary" class="mb-4" />
+    <v-alert v-if="error" type="error" class="mb-4">{{ error }}</v-alert>
 
     <template v-if="playlist">
       <div class="d-flex align-start mb-6 ga-4">

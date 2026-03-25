@@ -39,8 +39,12 @@ function onSeek(value) {
           <v-img :src="player.trackImage" cover />
         </v-avatar>
         <div class="overflow-hidden">
-          <div class="text-body-2 text-truncate font-weight-medium">{{ player.trackTitle }}</div>
-          <div class="text-caption text-medium-emphasis text-truncate">{{ player.trackArtist }}</div>
+          <div v-if="player.playerError" class="text-caption text-error text-truncate">{{ player.playerError }}</div>
+          <div v-else-if="!player.isReady" class="text-caption text-warning text-truncate">SDK connecting...</div>
+          <template v-else>
+            <div class="text-body-2 text-truncate font-weight-medium">{{ player.trackTitle }}</div>
+            <div class="text-caption text-medium-emphasis text-truncate">{{ player.trackArtist }}</div>
+          </template>
         </div>
       </div>
 

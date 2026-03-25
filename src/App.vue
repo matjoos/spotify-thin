@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted, watch } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { usePlayerStore } from '@/stores/player'
@@ -10,10 +10,34 @@ const auth = useAuthStore()
 const player = usePlayerStore()
 const router = useRouter()
 
+const clientIdInput = ref('')
+
+function saveAndLogin() {
+  if (clientIdInput.value.trim()) {
+    auth.setClientId(clientIdInput.value.trim())
+  }
+  if (!auth.needsSetup) {
+    auth.login()
+  }
+}
+
 onMounted(async () => {
   if (auth.isLoggedIn) {
     await auth.fetchUser()
     await player.initPlayer()
+  }
+
+  // Listen for OAuth callback from Tauri backend
+  if (window.__TAURI_INTERNALS__) {
+    const { listen } = await import('@tauri-apps/api/event')
+    listen('oauth-callback', async (event) => {
+      const params = new URLSearchParams(event.payload)
+      const code = params.get('code')
+      if (code) {
+        await auth.handleCallback(code)
+        router.push('/')
+      }
+    })
   }
 })
 
@@ -112,20 +136,3 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
     </template>
   </v-app>
 </template>
-
-<script>
-export default {
-  data: () => ({ clientIdInput: '' }),
-  methods: {
-    saveAndLogin() {
-      const auth = useAuthStore()
-      if (this.clientIdInput.trim()) {
-        auth.setClientId(this.clientIdInput.trim())
-      }
-      if (!auth.needsSetup) {
-        auth.login()
-      }
-    },
-  },
-}
-</script>

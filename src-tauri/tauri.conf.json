@@ -22,7 +22,8 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self'; script-src 'self' https://sdk.scdn.co; connect-src 'self' https://api.spotify.com https://accounts.spotify.com https://*.scdn.co https://*.spotify.com; img-src 'self' https://i.scdn.co https://*.spotifycdn.com data:; media-src 'self' https://*.scdn.co https://*.spotify.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com"
+      "csp": "default-src 'self' 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://sdk.scdn.co; connect-src * https: wss:; img-src * data: blob:; media-src * blob:; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com",
+      "dangerousDisableAssetCspModification": true
     }
   },
   "bundle": {

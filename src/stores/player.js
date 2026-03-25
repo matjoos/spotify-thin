@@ -8,6 +8,7 @@ export const usePlayerStore = defineStore('player', () => {
   const player = ref(null)
   const deviceId = ref(null)
   const isReady = ref(false)
+  const playerError = ref(null)
   const isPlaying = ref(false)
   const currentTrack = ref(null)
   const position = ref(0)
@@ -72,14 +73,17 @@ export const usePlayerStore = defineStore('player', () => {
 
         p.addListener('initialization_error', ({ message }) => {
           console.error('Init error:', message)
+          playerError.value = `Init: ${message}`
         })
 
         p.addListener('authentication_error', ({ message }) => {
           console.error('Auth error:', message)
+          playerError.value = `Auth: ${message}`
         })
 
         p.addListener('account_error', ({ message }) => {
           console.error('Account error:', message)
+          playerError.value = `Account: ${message}`
         })
 
         await p.connect()
@@ -186,6 +190,7 @@ export const usePlayerStore = defineStore('player', () => {
   return {
     player,
     deviceId,
+    playerError,
     isReady,
     isPlaying,
     currentTrack,

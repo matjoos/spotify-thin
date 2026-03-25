@@ -17,7 +17,7 @@ const loading = ref(false)
 onMounted(async () => {
   loading.value = true
   try {
-    const [pl, liked] = await Promise.all([getPlaylists(), getLikedSongs(50)])
+    const [pl, liked] = await Promise.all([getPlaylists(), getLikedSongs()])
     playlists.value = pl.items
     likedSongs.value = liked.items
   } catch (e) {
