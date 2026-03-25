@@ -25,6 +25,20 @@
       "csp": "default-src 'self'; script-src 'self' https://sdk.scdn.co; connect-src 'self' https://api.spotify.com https://accounts.spotify.com https://*.scdn.co https://*.spotify.com; img-src 'self' https://i.scdn.co https://*.spotifycdn.com data:; media-src 'self' https://*.scdn.co https://*.spotify.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com"
     }
   },
+  "bundle": {
+    "active": true,
+    "targets": ["app"],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.png"
+    ],
+    "macOS": {
+      "minimumSystemVersion": "10.15"
+    }
+  },
   "plugins": {
     "opener": {},
     "shell": {
