@@ -1,6 +1,12 @@
 #!/bin/bash
-DIR="$(dirname "$(dirname "$(dirname "$0")")")"
-cd "$DIR/.."
+
+# Source shell profile to get PATH (npx, node, etc.)
+export PATH="/usr/local/bin:/opt/homebrew/bin:$HOME/.nvm/versions/node/$(ls $HOME/.nvm/versions/node 2>/dev/null | tail -1)/bin:$PATH"
+[ -f "$HOME/.zshrc" ] && source "$HOME/.zshrc" 2>/dev/null
+[ -f "$HOME/.bashrc" ] && source "$HOME/.bashrc" 2>/dev/null
+
+# Navigate to the project directory
+cd "/Users/mattijsjoosten/Code/spotify-thin"
 
 # Kill any existing server on port 5173
 lsof -ti:5173 | xargs kill 2>/dev/null
@@ -11,13 +17,13 @@ npx vite preview --host 127.0.0.1 --port 5173 &
 SERVER_PID=$!
 
 # Wait for server to be ready
-for i in {1..20}; do
+for i in {1..30}; do
   curl -s http://127.0.0.1:5173 > /dev/null 2>&1 && break
-  sleep 0.3
+  sleep 0.5
 done
 
 # Open in Firefox
-open -a Firefox "http://127.0.0.1:5173"
+open "http://127.0.0.1:5173"
 
-# Keep running until Firefox closes or we get killed
+# Keep running until server exits
 wait $SERVER_PID

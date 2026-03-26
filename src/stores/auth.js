@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
-const isTauri = !!window.__TAURI_INTERNALS__
-
 const SCOPES = [
   'streaming',
   'user-read-email',
@@ -35,20 +33,16 @@ function base64urlEncode(buffer) {
     .replace(/=+$/, '')
 }
 
+const CLIENT_ID = '04cc0ea80b69446aa562ade9d971db4c'
+
 export const useAuthStore = defineStore('auth', () => {
   const accessToken = ref(localStorage.getItem('spotify_access_token') || '')
   const refreshToken = ref(localStorage.getItem('spotify_refresh_token') || '')
   const expiresAt = ref(Number(localStorage.getItem('spotify_expires_at')) || 0)
-  const clientId = ref(localStorage.getItem('spotify_client_id') || '')
+  const clientId = ref(CLIENT_ID)
   const user = ref(null)
 
   const isLoggedIn = computed(() => !!accessToken.value && Date.now() < expiresAt.value)
-  const needsSetup = computed(() => !clientId.value)
-
-  function setClientId(id) {
-    clientId.value = id
-    localStorage.setItem('spotify_client_id', id)
-  }
 
   function saveTokens(data) {
     accessToken.value = data.access_token
@@ -77,12 +71,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     const authUrl = `https://accounts.spotify.com/authorize?${params}`
 
-    if (isTauri) {
-      const { openUrl } = await import('@tauri-apps/plugin-opener')
-      await openUrl(authUrl)
-    } else {
-      window.location.href = authUrl
-    }
+    window.location.href = authUrl
   }
 
   async function handleCallback(code) {
@@ -166,8 +155,6 @@ export const useAuthStore = defineStore('auth', () => {
     clientId,
     user,
     isLoggedIn,
-    needsSetup,
-    setClientId,
     login,
     handleCallback,
     getValidToken,
